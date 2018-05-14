@@ -45,7 +45,7 @@ export function actionCreatorsMap<
 export function actionCreatorsMap<
   M extends { [type: string]: (data: any) => any }
 >(creators: M, namespace?: string) {
-  const creatorsMap = {} as ActionCreatorsMap<M>;
+  const creatorsMap = {} as ActionCreatorsMap<M> | ActionCreatorsMapNS<M>;
   for (const actionType of Object.keys(creators)) {
     const type = namespace ? `${namespace}/${actionType}` : actionType;
     creatorsMap[actionType] = actionCreator(type, creators[actionType]);
@@ -71,13 +71,13 @@ type ActionCreatorGeneric = ActionCreator<string, any, any>;
 
 type Payload<C extends ActionCreatorGeneric> = ReturnType<C>['payload'];
 
-type CreatorReducer<C extends ActionCreatorGeneric, S = any> = (
+type Reducer<C extends ActionCreatorGeneric, S = any> = (
   state: S,
   payload: Payload<C>,
 ) => S;
 
-type CreatorReducersMap<M extends ActionCreatorsMap<any>, S = any> = {
-  [T in keyof M]: CreatorReducer<M[T], S>
+type ReducersMap<M extends ActionCreatorsMap<any>, S = any> = {
+  [T in keyof M]: Reducer<M[T], S>
 };
 
 type Type<C extends ActionCreatorGeneric> = ReturnType<C>['type'];
@@ -85,7 +85,7 @@ type Type<C extends ActionCreatorGeneric> = ReturnType<C>['type'];
 export function makeReducer<M extends ActionCreatorsMap<any>, S>(
   creatorsMap: M,
   initialState: S,
-  reducersMap: CreatorReducersMap<M, S>,
+  reducersMap: ReducersMap<M, S>,
 ) {
   type Creator = M[keyof M];
   type T = Type<Creator>;
