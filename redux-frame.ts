@@ -15,9 +15,9 @@ export function actionCreator<T extends string, D, P>(
   return creator;
 }
 
-type ActionCreator<T extends string, D, P> = (data: D) => Action<T, P>;
+export type ActionCreator<T extends string, D, P> = (data: D) => Action<T, P>;
 
-type WrappersMap = { [typeId: string]: (data: any) => any };
+export type WrappersMap = { [typeId: string]: (data: any) => any };
 
 type ArgType<T> = T extends (arg: infer A) => any ? A : never;
 
@@ -62,14 +62,14 @@ type ActionCreatorGeneric = ActionCreator<string, any, any>;
 
 type Payload<C extends ActionCreatorGeneric> = ReturnType<C>['payload'];
 
-type Reducer<C extends ActionCreatorGeneric, S = any> = (
+export type Reducer<C extends ActionCreatorGeneric, S = any> = (
   state: S,
   payload: Payload<C>,
 ) => S;
 
 type ActionCreatorsMapGeneric = ActionCreatorsMap<WrappersMap>;
 
-type ReducersMap<M extends ActionCreatorsMapGeneric, S = any> = {
+export type ReducersMap<M extends ActionCreatorsMapGeneric, S = any> = {
   [T in keyof M]: Reducer<M[T], S>
 };
 
