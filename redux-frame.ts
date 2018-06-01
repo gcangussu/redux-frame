@@ -62,14 +62,14 @@ type ActionCreatorGeneric = ActionCreator<string, any, any>;
 
 type Payload<C extends ActionCreatorGeneric> = ReturnType<C>['payload'];
 
-export type Reducer<C extends ActionCreatorGeneric, S = any> = (
+export type Reducer<C extends ActionCreatorGeneric, S = {}> = (
   state: S,
   payload: Payload<C>,
 ) => S;
 
 type ActionCreatorsMapGeneric = ActionCreatorsMap<WrappersMap>;
 
-export type ReducersMap<M extends ActionCreatorsMapGeneric, S = any> = {
+export type ReducersMap<M extends ActionCreatorsMapGeneric, S = {}> = {
   [T in keyof M]: Reducer<M[T], S>
 };
 
